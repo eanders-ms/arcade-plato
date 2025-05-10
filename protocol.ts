@@ -1,18 +1,14 @@
 namespace PlayTogether {
     export namespace _Protocol {
 
-        export interface Message {
-            type: string;
-        }
-
         /**
          * Client --> Host
          * Notify host that the client is a PlayTogether client.
          */
-        export interface ClientInitMessage extends Message {
+        export interface ClientInitMessage {
             type: "client-init";
             payload: {
-                version: string;
+                version: number;
             };
         }
 
@@ -20,7 +16,7 @@ namespace PlayTogether {
          * Host --> Client
          * Communicate game config and other information to the client.
          */
-        export interface HostInitMessage extends Message {
+        export interface HostInitMessage {
             type: "host-init";
             payload: {
                 playerId: string; // ID of the local player
@@ -32,7 +28,7 @@ namespace PlayTogether {
          * Host --> Client
          * Notify client that a player is joining the game.
          */
-        export interface PlayerJoinedMessage extends Message {
+        export interface PlayerJoinedMessage {
             type: "player-joined";
             payload: {
                 playerId: string;
@@ -45,11 +41,13 @@ namespace PlayTogether {
          * Host --> Client
          * Notify client that a player is leaving the game.
          */
-        export interface PlayerLeftMessage extends Message {
+        export interface PlayerLeftMessage {
             type: "player-left";
             payload: {
                 playerId: string;
             };
         }
+
+        export type Message = ClientInitMessage | HostInitMessage | PlayerJoinedMessage | PlayerLeftMessage;
     }
 }

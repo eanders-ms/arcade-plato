@@ -16,7 +16,7 @@ namespace PlayTogether {
         initialized = true;
 
         const CHANNEL_ID = "arcade-plato-ext";
-        const VERSION = "1";
+        const VERSION = 1;
 
         control.simmessages.onReceived(CHANNEL_ID, (buf: Buffer) => {
             let msg = JSON.parse(buf.toString()) as _Protocol.Message;
