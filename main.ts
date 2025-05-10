@@ -46,7 +46,7 @@ namespace PlayTogether {
             },
         };
 
-        control.simmessages.send(CHANNEL_ID, Buffer.fromUTF8(JSON.stringify(initMsg)), false);
+        control.simmessages.send(CHANNEL_ID, Buffer.fromUTF8(JSON.stringify(initMsg)), true);
     }
 }
 
