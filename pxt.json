@@ -1,8 +1,9 @@
 {
-    "name": "my-project",
+    "name": "Play Together",
     "version": "0.0.1",
     "files": [
-        "main.ts"
+        "main.ts",
+        "protocol.ts"
     ],
     "supportedTargets": [
         "arcade"
