@@ -1,7 +1,9 @@
 namespace PlayTogether {
-    let initialized = false;
+    let _initialized = false;
     let _isHost = false;
     let _playerId: string;
+    let _ready = false;
+    let _readyCb: () => void;
 
     export function isHost() {
         return _isHost;
@@ -11,9 +13,25 @@ namespace PlayTogether {
         return _playerId;
     }
 
+    export function onReady(cb: () => void) {
+        if (!_ready) {
+            _readyCb = cb;
+        } else if (!_readyCb) {
+            _readyCb = cb;
+            cb && cb();
+        }
+    }
+
+    export function _checkReady() {
+        if (_ready) return;
+        if (!_playerId) return;
+        _ready = true;
+        _readyCb && _readyCb();
+    }
+
     export function _init() {
-        if (initialized) return;
-        initialized = true;
+        if (_initialized) return;
+        _initialized = true;
 
         const CHANNEL_ID = "arcade-plato-ext";
         const VERSION = 1;
@@ -26,6 +44,7 @@ namespace PlayTogether {
                     const mmsg = msg as _Protocol.HostInitMessage;
                     _isHost = mmsg.payload.isHost;
                     _playerId = mmsg.payload.playerId;
+                    _checkReady();
                     break;
                 }
                 case "player-joined": {
