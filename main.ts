@@ -36,15 +36,14 @@ namespace PlayTogether {
             }
         });
 
-        control.simmessages.send(
-            _Protocol.CHANNEL_ID,
-            Buffer.fromUTF8(JSON.stringify(<_Protocol.ClientInitMessage>{
-                type: "client-init",
-                payload: {
-                    version: _Protocol.VERSION,
-                },
-            }))
-        );
+        const initMsg: _Protocol.ClientInitMessage = {
+            type: "client-init",
+            payload: {
+                version: _Protocol.VERSION,
+            },
+        };
+
+        control.simmessages.send(_Protocol.CHANNEL_ID, Buffer.fromUTF8(JSON.stringify(initMsg)), false);
     }
 }
 
