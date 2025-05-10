@@ -1,6 +1,6 @@
 namespace PlayTogether {
     export namespace _Protocol {
-        export const CHANNEL_ID = "arcade/playtogether";
+        export const CHANNEL_ID = "arcade-plato-ext";
         export const VERSION = "1";
 
         export interface Message {
