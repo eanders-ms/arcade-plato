@@ -15,7 +15,10 @@ namespace PlayTogether {
         if (initialized) return;
         initialized = true;
 
-        control.simmessages.onReceived(_Protocol.CHANNEL_ID, (buf: Buffer) => {
+        const CHANNEL_ID = "arcade-plato-ext";
+        const VERSION = "1";
+
+        control.simmessages.onReceived(CHANNEL_ID, (buf: Buffer) => {
             let msg = JSON.parse(buf.toString()) as _Protocol.Message;
             if (!msg || !msg.type) return;
             switch (msg.type) {
@@ -39,11 +42,11 @@ namespace PlayTogether {
         const initMsg: _Protocol.ClientInitMessage = {
             type: "client-init",
             payload: {
-                version: _Protocol.VERSION,
+                version: VERSION,
             },
         };
 
-        control.simmessages.send(_Protocol.CHANNEL_ID, Buffer.fromUTF8(JSON.stringify(initMsg)), false);
+        control.simmessages.send(CHANNEL_ID, Buffer.fromUTF8(JSON.stringify(initMsg)), false);
     }
 }
 
