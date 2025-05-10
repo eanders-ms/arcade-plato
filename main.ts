@@ -16,8 +16,9 @@ namespace PlayTogether {
         return _playerId;
     }
 
-    //% blockId=playtogether_onready
-    export function onReady(cb: () => void) {
+    //% block="on system ready"
+    //% blockId=playtogether_onsystemready
+    export function onSystemReady(cb: () => void) {
         if (!_ready) {
             _readyCb = cb;
         } else if (!_readyCb) {
