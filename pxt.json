@@ -1,5 +1,5 @@
 {
-    "name": "Play Together",
+    "name": "play-together",
     "version": "0.0.2",
     "files": [
         "main.ts",
