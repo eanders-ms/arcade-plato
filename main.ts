@@ -12,24 +12,28 @@ namespace PlayTogether {
         private static _ready = false;
         private static _readyCb: () => void;
 
-        //% block="i'm host"
+        //% block="i'm the host"
+        //% blockId=playtogether_system_ishost
         //% group="System"
         static isHost() {
             return this._isHost;
         }
 
         //% block="my player id"
+        //% blockId=playtogether_system_playerid
         //% group="System"
         static playerId() {
             return this._playerId;
         }
 
         //% block="default zone"
+        //% blockId=playtogether_system_defaultzone
         //% group="System"
         static defaultZone() {
             return this._defaultZone;
         }
         //% block="set default zone"
+        //% blockId=playtogether_system_setdefaultzone
         //% group="System"
         static setDefaultZone(zone: string) {
             this._defaultZone = zone;
@@ -58,7 +62,7 @@ namespace PlayTogether {
             this._initialized = true;
 
             control.simmessages.onReceived(CHANNEL_ID, (buf: Buffer) => {
-                let msg = JSON.parse(buf.toString()) as _Protocol.Message;
+                const msg = JSON.parse(buf.toString()) as _Protocol.Message;
                 if (!msg || !msg.type) return;
                 switch (msg.type) {
                     case "host-init": {
