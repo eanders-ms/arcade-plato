@@ -30,6 +30,8 @@ namespace PlayTogether {
     export class PlayerManager {
         private players: Player[] = [];
 
+        constructor() {}
+
         addPlayer(id: string, name: string, zone: string): Player {
             const player = new Player(id, name, zone);
             this.players.push(player);
