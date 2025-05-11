@@ -4,7 +4,8 @@
     "files": [
         "system.ts",
         "player.ts",
-        "protocol.ts"
+        "protocol.ts",
+        "util.ts"
     ],
     "supportedTargets": [
         "arcade"
