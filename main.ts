@@ -12,28 +12,26 @@ namespace PlayTogether {
         private static _ready = false;
         private static _readyCb: () => void;
 
-        //% block="is host"
-        //% blockId=playtogether_system_ishost
+        //% block="i'm host"
         //% group="System"
-        static get isHost() {
+        static isHost() {
             return this._isHost;
         }
 
-        //% block="player id"
-        //% blockId=playtogether_system_playerid
+        //% block="my player id"
         //% group="System"
-        static get playerId() {
+        static playerId() {
             return this._playerId;
         }
 
         //% block="default zone"
-        //% blockId=playtogether_system_defaultzone
         //% group="System"
-        //% blockCombine
-        static get defaultZone() {
+        static defaultZone() {
             return this._defaultZone;
         }
-        static set defaultZone(zone: string) {
+        //% block="set default zone"
+        //% group="System"
+        static setDefaultZone(zone: string) {
             this._defaultZone = zone;
         }
 
