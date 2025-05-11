@@ -1,4 +1,4 @@
-//% blockNamespace="Play Together"
+//% blockNamespace="Play Together" icon="\uf11b"
 namespace PlayTogether {
 
     const CHANNEL_ID = "arcade-plato-ext";
