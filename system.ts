@@ -53,16 +53,18 @@ namespace PlayTogether {
             }
         }
 
-        //% block="on player joined"
+        //% block="on $player joined"
         //% blockId=playtogether_system_onplayerjoined
         //% group="System"
+        //% draggableParameters=reporter
         static onPlayerJoined(cb: (player: Player) => void) {
             this._playerJoinedCb = cb;
         }
 
-        //% block="on player left"
+        //% block="on $player left"
         //% blockId=playtogether_system_onplayerleft
         //% group="System"
+       //% draggableParameters=reporter
         static onPlayerLeft(cb: (player: Player) => void) {
             this._playerLeftCb = cb;
         }
