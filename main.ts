@@ -1,74 +1,95 @@
+//% blockNamespace="Play Together"
 namespace PlayTogether {
-    let _initialized = false;
-    let _isHost = false;
-    let _playerId: string;
-    let _ready = false;
-    let _readyCb: () => void;
 
     const CHANNEL_ID = "arcade-plato-ext";
     const VERSION = 1;
 
-    export function isHost() {
-        return _isHost;
-    }
+    export class System {
+        private static _isHost = false;
+        private static _playerId: string;
+        private static _defaultZone = "lobby";
+        private static _initialized = false;
+        private static _ready = false;
+        private static _readyCb: () => void;
 
-    export function playerId() {
-        return _playerId;
-    }
+        //% block="is host"
+        //% blockId=playtogether_system_ishost
+        //% group="System"
+        static get isHost() {
+            return this._isHost;
+        }
 
-    //% block="on system ready"
-    //% blockId=playtogether_onsystemready
-    export function onSystemReady(cb: () => void) {
-        if (!_ready) {
-            _readyCb = cb;
-        } else if (!_readyCb) {
-            _readyCb = cb;
-            cb && cb();
+        //% block="player id"
+        //% blockId=playtogether_system_playerid
+        //% group="System"
+        static get playerId() {
+            return this._playerId;
+        }
+
+        //% block="default zone"
+        //% blockId=playtogether_system_defaultzone
+        //% group="System"
+        //% blockCombine
+        static get defaultZone() {
+            return this._defaultZone;
+        }
+        static set defaultZone(zone: string) {
+            this._defaultZone = zone;
+        }
+
+        //% block="on system ready"
+        //% blockId=playtogether_system_onready
+        //% group="System"
+        static onReady(cb: () => void) {
+            if (this._ready) {
+                cb && cb();
+            } else {
+                this._readyCb = cb;
+            }
+        }
+
+        static _markReady() {
+            if (this._ready) return;
+            if (!this._playerId) return;
+            this._ready = true;
+            this._readyCb && this._readyCb();
+        }
+
+        static _init() {
+            if (this._initialized) return;
+            this._initialized = true;
+
+            control.simmessages.onReceived(CHANNEL_ID, (buf: Buffer) => {
+                let msg = JSON.parse(buf.toString()) as _Protocol.Message;
+                if (!msg || !msg.type) return;
+                switch (msg.type) {
+                    case "host-init": {
+                        const mmsg = msg as _Protocol.HostInitMessage;
+                        this._isHost = mmsg.payload.isHost;
+                        this._playerId = mmsg.payload.playerId;
+                        this._markReady();
+                        break;
+                    }
+                    case "player-joined": {
+                        const mmsg = msg as _Protocol.PlayerJoinedMessage;
+                        break;
+                    }
+                    case "player-left": {
+                        const mmsg = msg as _Protocol.PlayerLeftMessage;
+                        break;
+                    }
+                }
+            });
+
+            const initMsg: _Protocol.ClientInitMessage = {
+                type: "client-init",
+                payload: {
+                    version: VERSION,
+                },
+            };
+
+            control.simmessages.send(CHANNEL_ID, Buffer.fromUTF8(JSON.stringify(initMsg)), true);
         }
     }
-
-    export function _markReady() {
-        if (_ready) return;
-        if (!_playerId) return;
-        _ready = true;
-        _readyCb && _readyCb();
-    }
-
-    export function _init() {
-        if (_initialized) return;
-        _initialized = true;
-
-        control.simmessages.onReceived(CHANNEL_ID, (buf: Buffer) => {
-            let msg = JSON.parse(buf.toString()) as _Protocol.Message;
-            if (!msg || !msg.type) return;
-            switch (msg.type) {
-                case "host-init": {
-                    const mmsg = msg as _Protocol.HostInitMessage;
-                    _isHost = mmsg.payload.isHost;
-                    _playerId = mmsg.payload.playerId;
-                    _markReady();
-                    break;
-                }
-                case "player-joined": {
-                    const mmsg = msg as _Protocol.PlayerJoinedMessage;
-                    break;
-                }
-                case "player-left": {
-                    const mmsg = msg as _Protocol.PlayerLeftMessage;
-                    break;
-                }
-            }
-        });
-
-        const initMsg: _Protocol.ClientInitMessage = {
-            type: "client-init",
-            payload: {
-                version: VERSION,
-            },
-        };
-
-        control.simmessages.send(CHANNEL_ID, Buffer.fromUTF8(JSON.stringify(initMsg)), true);
-    }
+    System._init();
 }
-
-PlayTogether._init();
