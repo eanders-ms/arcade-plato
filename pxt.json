@@ -1,6 +1,6 @@
 {
     "name": "play-together",
-    "version": "0.0.12",
+    "version": "0.0.13",
     "files": [
         "main.ts",
         "protocol.ts"
