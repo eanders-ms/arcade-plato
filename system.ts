@@ -45,7 +45,6 @@ namespace PlayTogether {
         //% block="on system ready"
         //% blockId=playtogether_system_onready
         //% group="System"
-        //% fixedInstance
         static onReady(cb: () => void) {
             if (this._ready) {
                 cb && cb();
@@ -57,7 +56,6 @@ namespace PlayTogether {
         //% block="on player joined"
         //% blockId=playtogether_system_onplayerjoined
         //% group="System"
-        //% fixedInstance
         static onPlayerJoined(cb: (player: Player) => void) {
             this._playerJoinedCb = cb;
         }
@@ -65,7 +63,6 @@ namespace PlayTogether {
         //% block="on player left"
         //% blockId=playtogether_system_onplayerleft
         //% group="System"
-        //% fixedInstance
         static onPlayerLeft(cb: (player: Player) => void) {
             this._playerLeftCb = cb;
         }
