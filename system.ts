@@ -11,15 +11,18 @@ namespace PlayTogether {
         private static _initialized = false;
         private static _ready = false;
         private static _readyCb: () => void;
+        private static _playerJoinedCb: (player: Player) => void;
+        private static _playerLeftCb: (player: Player) => void;
+        private static _playerMgr = new PlayerManager();
 
-        //% block="i'm the host"
+        //% block="is host"
         //% blockId=playtogether_system_ishost
         //% group="System"
         static isHost() {
             return this._isHost;
         }
 
-        //% block="my player id"
+        //% block="player id"
         //% blockId=playtogether_system_playerid
         //% group="System"
         static playerId() {
@@ -42,12 +45,29 @@ namespace PlayTogether {
         //% block="on system ready"
         //% blockId=playtogether_system_onready
         //% group="System"
+        //% fixedInstance
         static onReady(cb: () => void) {
             if (this._ready) {
                 cb && cb();
             } else {
                 this._readyCb = cb;
             }
+        }
+
+        //% block="on player joined"
+        //% blockId=playtogether_system_onplayerjoined
+        //% group="System"
+        //% fixedInstance
+        static onPlayerJoined(cb: (player: Player) => void) {
+            this._playerJoinedCb = cb;
+        }
+
+        //% block="on player left"
+        //% blockId=playtogether_system_onplayerleft
+        //% group="System"
+        //% fixedInstance
+        static onPlayerLeft(cb: (player: Player) => void) {
+            this._playerLeftCb = cb;
         }
 
         static _markReady() {
@@ -74,10 +94,19 @@ namespace PlayTogether {
                     }
                     case "player-joined": {
                         const mmsg = msg as _Protocol.PlayerJoinedMessage;
+                        if (!this._playerMgr.getPlayer(mmsg.payload.playerId)) {
+                            const player = this._playerMgr.addPlayer(mmsg.payload.playerId, mmsg.payload.playerName, this._defaultZone);
+                            this._playerJoinedCb && this._playerJoinedCb(player);
+                        }
                         break;
                     }
                     case "player-left": {
                         const mmsg = msg as _Protocol.PlayerLeftMessage;
+                        const player = this._playerMgr.getPlayer(mmsg.payload.playerId);
+                        if (player) {
+                            this._playerMgr.removePlayer(mmsg.payload.playerId);
+                            this._playerLeftCb && this._playerLeftCb(player);
+                        }
                         break;
                     }
                 }
