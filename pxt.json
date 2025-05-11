@@ -2,7 +2,8 @@
     "name": "play-together",
     "version": "0.0.14",
     "files": [
-        "main.ts",
+        "system.ts",
+        "player.ts",
         "protocol.ts"
     ],
     "supportedTargets": [
