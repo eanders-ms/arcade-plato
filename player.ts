@@ -3,6 +3,7 @@ namespace PlayTogether {
         private _id: string;
         private _name: string;
         private _zone: string;
+        private _sprite: Sprite;
 
         constructor(id: string, name: string, zone: string) {
             this._id = id;
@@ -14,6 +15,9 @@ namespace PlayTogether {
             return this._id;
         }
 
+        //% block="name"
+        //% group="Player"
+        //% blockCombine
         get name() {
             return this._name;
         }
@@ -24,6 +28,13 @@ namespace PlayTogether {
 
         set zone(zone: string) {
             this._zone = zone;
+        }
+
+        _applyKeyDown(key: string) {
+            //this._sprite.a
+        }
+
+        _applyKeyUp(key: string) {
         }
     }
 

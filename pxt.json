@@ -2,10 +2,10 @@
     "name": "play-together",
     "version": "0.0.19",
     "files": [
-        "system.ts",
-        "player.ts",
+        "util.ts",
         "protocol.ts",
-        "util.ts"
+        "player.ts",
+        "system.ts"
     ],
     "supportedTargets": [
         "arcade"

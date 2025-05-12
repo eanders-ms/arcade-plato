@@ -1,9 +1,6 @@
 //% blockNamespace="Play Together" icon="\uf11b"
 namespace PlayTogether {
 
-    const CHANNEL_ID = "arcade-plato-ext";
-    const VERSION = 1;
-
     export class System {
         private static _isHost = false;
         private static _playerId: string;
@@ -81,26 +78,26 @@ namespace PlayTogether {
             this._initialized = true;
 
             control.simmessages.onReceived(CHANNEL_ID, (buf: Buffer) => {
-                const msg = JSON.parse(buf.toString()) as _Protocol.Message;
+                const msg = JSON.parse(buf.toString()) as _Protocol.HostToCli.Message;
                 if (!msg || !msg.type) return;
                 switch (msg.type) {
-                    case "host-init": {
-                        const mmsg = msg as _Protocol.HostInitMessage;
+                    case "init": {
+                        const mmsg = msg as _Protocol.HostToCli.InitMessage;
                         this._isHost = mmsg.payload.isHost;
                         this._playerId = mmsg.payload.playerId;
                         this._markReady();
                         break;
                     }
-                    case "player-joined": {
-                        const mmsg = msg as _Protocol.PlayerJoinedMessage;
+                    case "player-join": {
+                        const mmsg = msg as _Protocol.HostToCli.PlayerJoinMessage;
                         if (!this._playerMgr.getPlayer(mmsg.payload.playerId)) {
                             const player = this._playerMgr.addPlayer(mmsg.payload.playerId, mmsg.payload.playerName, this._defaultZone);
                             this._playerJoinedCb && this._playerJoinedCb(player);
                         }
                         break;
                     }
-                    case "player-left": {
-                        const mmsg = msg as _Protocol.PlayerLeftMessage;
+                    case "player-leave": {
+                        const mmsg = msg as _Protocol.HostToCli.PlayerLeaveMessage;
                         const player = this._playerMgr.getPlayer(mmsg.payload.playerId);
                         if (player) {
                             this._playerMgr.removePlayer(mmsg.payload.playerId);
@@ -111,8 +108,8 @@ namespace PlayTogether {
                 }
             });
 
-            const initMsg: _Protocol.ClientInitMessage = {
-                type: "client-init",
+            const initMsg: _Protocol.CliToHost.InitMessage = {
+                type: "init",
                 payload: {
                     version: VERSION,
                 },
